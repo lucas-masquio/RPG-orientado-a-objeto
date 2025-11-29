@@ -5,6 +5,7 @@ class BossFinal:
         self.nome = "O Devorador da Névoa"
         self.forca = 12
         self.inteligencia = 10
+        self.agilidade = random.randint(1, 10)
         self.defesa = 6
         self.vida = 200
         self.mana = 80

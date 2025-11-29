@@ -48,7 +48,6 @@ class Main:
         print(f"Mana: {self.personagem.mana}\n")
 
     def atacar(self, inimigo):
-        inimigo = Inimigo()
         if random.randint(1,100) <= inimigo.agilidade:
             print(f"{inimigo.nome} esquivou do ataque!")
             return
@@ -177,14 +176,24 @@ Se a névoa não te pegar… as ruínas pegam.
         print(introducao)
         print(f"\n{self.personagem.nome} a névoa está te esperando...\n")
 
-    def mostrar_acao_boss(self, r):
+    def mostrar_acao_boss(self, r, esquiva=False, bloqueio=False):
+        if esquiva:
+            print("Você esquivou do ataque do Boss!")
+            return
+
+        dano = r.get("dano", 0)
+
+        if bloqueio and dano > 0:
+            dano = int(dano / 2)
+            print(f"Você bloqueou parcialmente! Dano reduzido para {dano}.")
+
         if r["tipo"] == "ataque":
-            print(f"O Boss causa {r['dano']} de dano!")
-            self.personagem.vida -= r["dano"]
+            print(f"O Boss causa {dano} de dano!")
+            self.personagem.vida -= dano
 
         elif r["tipo"] == "magia":
-            print(f"O Boss usa magia e causa {r['dano']} de dano!")
-            self.personagem.vida -= r["dano"]
+            print(f"O Boss usa magia e causa {dano} de dano!")
+            self.personagem.vida -= dano
 
         elif r["tipo"] == "controle":
             if r["paralisou"]:
@@ -199,32 +208,57 @@ Se a névoa não te pegar… as ruínas pegam.
         print("\nO Devorador da Névoa apareceu!\n")
 
         while boss.vida > 0 and self.personagem.vida > 0:
+            esquiva_turn = False
+            bloqueio_turn = False
+
             if not jogador_paralisado:
-                self.atacar()
-                if boss.vida <= 0: break
-                self.esquivar()
-                self.bloquear()
-                print("\nEscolha sua habilidade especial:")
-                self.menuHabilidades()
-                escolha = int(input("Escolha a habilidade: "))
-                resultado = self.usarHabilidade(escolha, boss)
-                self.mostrar_resultado(resultado)
+                print("\nEscolha sua ação:")
+                print("1 - Atacar")
+                print("2 - Esquivar")
+                print("3 - Bloquear")
+                print("4 - Habilidades")
+
+                try:
+                    escolha = int(input("Escolha a ação: "))
+                except ValueError:
+                    print("Entrada inválida. Você perde o turno.")
+                    escolha = None
+
+                if escolha == 1:
+                    self.atacar(boss)
+                elif escolha == 2:
+                    esquiva_turn = self.esquivar()
+                elif escolha == 3:
+                    bloqueio_turn = self.bloquear()
+                elif escolha == 4:
+                    self.menuHabilidades()
+                    try:
+                        escolha_h = int(input("Escolha a habilidade: "))
+                        resultado = self.usarHabilidade(escolha_h, boss)
+                        self.mostrar_resultado(resultado)
+                    except ValueError:
+                        print("Entrada inválida para habilidade.")
+                else:
+                    print("Opção inválida. Você perde o turno.")
             else:
                 print("Você está paralisado e perde a vez!")
                 jogador_paralisado = False
 
-            if boss.vida <= 0: break
+            if boss.vida <= 0:
+                break
+
             print("\nTurno do Boss:")
             acao = boss.acao_aleatoria()
-            self.mostrar_acao_boss(acao)
+            self.mostrar_acao_boss(acao, esquiva=esquiva_turn, bloqueio=bloqueio_turn)
 
             if acao["tipo"] == "controle" and acao["paralisou"]:
                 jogador_paralisado = True
 
-            if self.personagem.vida > 0:
-                print("\nVOCÊ VENCEU O BOSS FINAL!")
-            else:
-                print("\nVOCÊ FOI CONSUMIDO PELA NÉVOA...")
+        
+        if boss.vida <= 0 and self.personagem.vida > 0:
+            print("\nVOCÊ VENCEU O BOSS FINAL!")
+        else:
+            print("\nVOCÊ FOI CONSUMIDO PELA NÉVOA...")
 
 if __name__ == "__main__":
     game = Main(Personagem)
