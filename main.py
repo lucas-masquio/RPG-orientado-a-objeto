@@ -201,6 +201,13 @@ Se a névoa não te pegar… as ruínas pegam.
             else:
                 print("O Boss tentou paralisar, mas você resistiu!")
 
+    def mostrar_status(self, boss):
+        print("\n--- Status da Batalha ---")
+        jogador = self.personagem
+        print(f"Jogador: {jogador.nome} | Vida: {jogador.vida} | Mana: {jogador.mana} | Defesa: {jogador.defesa} | Agilidade: {jogador.agilidade}")
+        print(f"Boss: {boss.nome} | Vida: {boss.vida} | Mana: {boss.mana} | Defesa: {boss.defesa} | Agilidade: {getattr(boss, 'agilidade', 'N/A')}")
+        print("-------------------------\n")
+
     def luta_final(self):
         boss = BossFinal()
         jogador_paralisado = False
@@ -250,6 +257,8 @@ Se a névoa não te pegar… as ruínas pegam.
             print("\nTurno do Boss:")
             acao = boss.acao_aleatoria()
             self.mostrar_acao_boss(acao, esquiva=esquiva_turn, bloqueio=bloqueio_turn)
+
+            self.mostrar_status(boss)
 
             if acao["tipo"] == "controle" and acao["paralisou"]:
                 jogador_paralisado = True

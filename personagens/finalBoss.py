@@ -7,7 +7,7 @@ class BossFinal:
         self.inteligencia = 10
         self.agilidade = random.randint(1, 10)
         self.defesa = 6
-        self.vida = 200
+        self.vida = 150
         self.mana = 80
 
     def ataque_sombrio(self):
