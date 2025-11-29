@@ -1,11 +1,11 @@
 import random
-from personagem import Personagem
+from personagens.personagem import Personagem
 from classes.mago import Mago
 from classes.guerreiro import Guerreiro
 from classes.ladrao import Ladrao
 from classes.bastardo import Bastardo
-from classes.inimigo.inimigo import Inimigo
-from classes.inimigo.finalBoss import BossFinal
+from personagens.inimigo import Inimigo
+from personagens.finalBoss import BossFinal
 
 class Main:
     def __init__(self, Personagem):
