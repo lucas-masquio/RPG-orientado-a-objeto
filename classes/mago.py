@@ -1,5 +1,5 @@
 import random
-from personagem import Personagem
+from personagens.personagem import Personagem
 
 class Mago(Personagem):
     def __init__(self, nome):
@@ -58,11 +58,11 @@ class Mago(Personagem):
 
         self.mana -= 15
         bonus = random.randint(3, 8)
-        aumento_defesa += bonus
+        aumento_defesa = bonus
 
         return {
             "tipo": "buff",
             "habilidade": "escudo_magico",
-            "aumento_defesa": aumento_defesa,
+            "bonus_defesa": aumento_defesa,
             "mana_restante": self.mana
         }

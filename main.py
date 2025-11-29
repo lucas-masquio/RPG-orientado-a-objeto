@@ -103,6 +103,7 @@ class Main:
             print("2 - Grito de Guerra")
             print("3 - Investida")
 
+
     def usarHabilidade(self, numero, inimigo=None):
 
         if isinstance(self.personagem, Mago):
@@ -199,6 +200,11 @@ Se a névoa não te pegar… as ruínas pegam.
 
         while boss.vida > 0 and self.personagem.vida > 0:
             if not jogador_paralisado:
+                self.atacar()
+                if boss.vida <= 0: break
+                self.esquivar()
+                self.bloquear()
+                print("\nEscolha sua habilidade especial:")
                 self.menuHabilidades()
                 escolha = int(input("Escolha a habilidade: "))
                 resultado = self.usarHabilidade(escolha, boss)
