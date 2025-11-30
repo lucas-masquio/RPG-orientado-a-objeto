@@ -38,7 +38,6 @@ class Main:
         print(f"Defesa: {self.personagem.defesa}")
         print(f"Vida: {self.personagem.vida}")
         print(f"Mana: {self.personagem.mana}\n")
-        # registra vida máxima para curas na estalagem
         self.personagem.vida_maxima = self.personagem.vida
 
     def rodar(self):
